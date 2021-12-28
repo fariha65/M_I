@@ -1,0 +1,96 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+MSGIN DB "Enter a Number:$"
+MSGOUT DB "Given Factorial number is:$"
+ 
+A DB ?  ;INPUT A VALUE=5
+TEMP DB ?   ;SHOW RESULT OF FACTORIAL NUMBER
+ 
+.CODE
+MAIN PROC
+ MOV AX,@DATA
+ MOV DS,AX
+
+ CALL INPUT
+
+   
+ CALL FACT
+ MOV TEMP,AL
+
+
+ CALL OUTPUT
+
+ MOV AH,4CH
+ INT 21H
+ 
+
+ MAIN ENDP
+   
+
+INPUT PROC
+    
+ MOV AH,9H     ;CHARACTER STRING OUTPUT
+ LEA DX,MSGIN  ;DISPLAY INPUT MSG
+ INT 21H       ;IT CHECK AH & CALL SERVICE ROUTIN 
+ 
+ MOV AH,1H     ;SINGLE KEY INPUT &IT STORE AL REGISTER
+ INT 21H
+ SUB AL,48     ;48 IS 0  ASCI VALUE
+ MOV A,AL
+ RET
+ INPUT ENDP
+ 
+ 
+ FACT PROC
+    
+     MOV CL,A  ;REGISTER CL=A(5)/CL=5
+     DEC CL    ;CL-1=5-1=4                 
+    MOV AL,A   ; REGISTER LOAD AL=A(5)/AL=5
+   
+    LOOP1:
+               ;LOOP1 INSTRUCTION          ;LOOP2 INSTRUCTION
+     DEC A     ;A-1=5-1=4
+    MUL A      ;AL=AL-A=5*4=14(HEXA VALUE)
+    DEC CL     ;CL=CL-1=4-1=3
+   
+   JNZ LOOP1   ;JUMP ON NO ZERO
+
+    
+ RET 
+ FACT ENDP 
+
+
+
+
+ OUTPUT PROC
+    
+   MOV AH,2H
+   MOV DL,0AH
+   INT 21H
+   MOV DL,0DH  ;NEW LINE
+   INT 21H
+            
+   MOV AH,9H
+   LEA DX,MSGOUT 
+   INT 21H
+   
+   MOV AH,2H  
+   ADD TEMP,48      
+   MOV DL,TEMP
+   INT 21H
+
+ OUTPUT ENDP
+
+ 
+ EXIT:
+    MOV AH,4CH
+    INT 21H
+
+END MAIN 
+RET
+
+
+
+
+

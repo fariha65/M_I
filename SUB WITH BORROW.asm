@@ -1,0 +1,33 @@
+.MODEL SMALL
+.STACK 200H
+.DATA
+
+NUM1 DW 1152H
+NUM2 DW 2335H
+RESULT DW ?
+BORROW DW 0 
+
+.CODE 
+  
+  MAIN PROC
+    
+    MOV AX,@DATA 
+    MOV DS,AX
+    
+    MOV AX,NUM1
+    SUB AX,NUM2
+    MOV RESULT,AX
+    JNC EXIT
+    INC BORROW
+    
+    
+    EXIT:
+    MOV AH,4CH
+    INT 21H
+    
+    MAIN ENDP
+  END MAIN
+    
+
+
+
